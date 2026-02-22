@@ -36,7 +36,7 @@
         .active { display: flex; }
 
         h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: var(--bs-yellow);
             text-shadow: 4px 4px #000;
             margin-bottom: 20px;
@@ -53,6 +53,7 @@
             cursor: pointer;
             box-shadow: 0 5px 0 #996600;
             text-transform: uppercase;
+            margin-top: 20px;
         }
 
         select {
@@ -65,121 +66,146 @@
             font-weight: bold;
         }
 
-        /* Shuffle Effect Styles */
-        .shuffle-container {
-            font-size: 45px;
+        /* Shuffle Text */
+        .shuffle-text {
+            font-size: 50px;
             color: var(--bs-yellow);
             text-shadow: 3px 3px #000;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0,0,0,0.3);
-            width: 100%;
-            border-top: 4px solid var(--bs-blue);
-            border-bottom: 4px solid var(--bs-blue);
-            margin: 20px 0;
         }
 
-        .result-card {
-            background: var(--bs-blue);
-            padding: 40px;
-            border: 6px solid var(--bs-white);
-            border-radius: 30px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.7);
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* De "Video" Kaart Stijl */
+        .challenge-card {
+            width: 400px;
+            height: 200px;
+            border: 6px solid #000;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+            background-color: #ff0000; /* Standaard kleur */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         @keyframes popIn {
-            0% { transform: scale(0.5); opacity: 0; }
+            0% { transform: scale(0.6); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
 
-        .result-brawler { font-size: 40px; color: var(--bs-yellow); display: block; }
-        .result-trophies { font-size: 60px; display: block; margin: 10px 0; }
+        .brawler-img-placeholder {
+            width: 50%;
+            height: 100%;
+            background: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 6px solid #000;
+            font-size: 14px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-info {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .card-trophies {
+            font-size: 60px;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .trophy-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 5px;
+        }
+
+        .card-name {
+            background: #fff;
+            color: #000;
+            padding: 2px 15px;
+            font-size: 24px;
+            text-transform: uppercase;
+            transform: skew(-10deg);
+        }
     </style>
 </head>
 <body>
 
     <div id="home-screen" class="screen active">
-        <h1>BRAWL SPIN</h1>
-        <p>Kies moeilijkheid:</p>
+        <h1>BRAWL CHALLENGE</h1>
         <select id="difficulty">
-            <option value="easy">Easy (200-500)</option>
-            <option value="medium">Medium (500-600)</option>
-            <option value="hard">Hard (600-800)</option>
-            <option value="impossible">Impossible (1000)</option>
+            <option value="easy">EASY (200-500)</option>
+            <option value="medium">MEDIUM (500-600)</option>
+            <option value="hard">HARD (600-800)</option>
+            <option value="impossible">IMPOSSIBLE (1000)</option>
         </select>
-        <button class="btn" onclick="startShuffle()">START</button>
+        <button class="btn" onclick="startShuffle()">START SPIN</button>
     </div>
 
     <div id="shuffle-screen" class="screen">
-        <h1>WIE WORDT HET?</h1>
-        <div class="shuffle-container" id="shuffle-text">...</div>
+        <div class="shuffle-text" id="shuffle-text">SHUFFLING...</div>
     </div>
 
     <div id="result-screen" class="screen">
-        <div class="result-card">
-            <span class="result-brawler" id="brawler-name">-</span>
-            <span class="result-trophies" id="trophy-count">0</span>
-            <p>TROFEEËN CHALLENGE</p>
+        <div class="challenge-card" id="card-bg">
+            <div class="brawler-img-placeholder" id="brawler-img">
+                </div>
+            <div class="card-info">
+                <div class="card-trophies" id="res-trophies">0</div>
+                <div style="font-size: 20px; margin-bottom: 10px;">🏆</div>
+                <div class="card-name" id="res-name">BRAWLER</div>
+            </div>
         </div>
-        <br>
-        <button class="btn" onclick="goHome()">OPNIEUW</button>
+        <button class="btn" onclick="goHome()">VOLGENDE</button>
     </div>
 
     <script>
-        const brawlers = [
-            "Kaze", "Amber", "Chester", "Cordelius", "Crow", "Draco", "Kenji", "Kit", "Leon", "Meg", "Pierce", "Sandy", "Spike", "Surge",
-            "Alli", "Buster", "Buzz", "Byron", "Charlie", "Chuck", "Clancy", "Doug", "Eve", "Fang", "Finx", "Gene", "Gigi", "Glowbert", "Gray", "Jae-Yong", "Janet", "Juju", "Lily", "Lou", "Lumi", "Max", "Melodie", "Mico", "Mina", "Moe", "Mortis", "Mr. P", "Ollie", "Otis", "R-T", "Ruffs", "Sprout", "Squeak", "Tara", "Willow", "Ziggy",
-            "Angelo", "Ash", "Bea", "Belle", "Berry", "Bibi", "Bo", "Bonnie", "Colette", "Edgar", "Emz", "Frank", "Gale", "Griff", "Grom", "Hank", "Larry & Lawrie", "Lola", "Maisie", "Mandy", "Meeple", "Nani", "Pam", "Pearl", "Piper", "Sam", "Shade", "Stu", "Trunk",
-            "8-Bit", "Carl", "Darryl", "Dynamike", "Gus", "Jacky", "Jessie", "Penny", "Rico", "Tick",
-            "Barley", "Brock", "Bull", "Colt", "El-Primo", "Nita", "Poco", "Rosa", "Shelly"
-        ];
+        const brawlers = ["Kaze", "Amber", "Chester", "Cordelius", "Crow", "Draco", "Kenji", "Kit", "Leon", "Meg", "Pierce", "Sandy", "Spike", "Surge", "Alli", "Buster", "Buzz", "Byron", "Charlie", "Chuck", "Clancy", "Doug", "Eve", "Fang", "Finx", "Gene", "Gigi", "Glowbert", "Gray", "Jae-Yong", "Janet", "Juju", "Lily", "Lou", "Lumi", "Max", "Melodie", "Mico", "Mina", "Moe", "Mortis", "Mr. P", "Ollie", "Otis", "R-T", "Ruffs", "Sprout", "Squeak", "Tara", "Willow", "Ziggy", "Angelo", "Ash", "Bea", "Belle", "Berry", "Bibi", "Bo", "Bonnie", "Colette", "Edgar", "Emz", "Frank", "Gale", "Griff", "Grom", "Hank", "Larry & Lawrie", "Lola", "Maisie", "Mandy", "Meeple", "Nani", "Pam", "Pearl", "Piper", "Sam", "Shade", "Stu", "Trunk", "8-Bit", "Carl", "Darryl", "Dynamike", "Gus", "Jacky", "Jessie", "Penny", "Rico", "Tick", "Barley", "Brock", "Bull", "Colt", "El-Primo", "Nita", "Poco", "Rosa", "Shelly"];
+        
+        const colors = ["#ff0000", "#aa00ff", "#00ff00", "#0066ff", "#ffcc00", "#ff6600"];
 
         function startShuffle() {
             document.getElementById('home-screen').classList.remove('active');
             document.getElementById('shuffle-screen').classList.add('active');
 
-            let iterations = 0;
-            let maxIterations = 40; // Hoe vaak hij wisselt
-            let speed = 50; // Start snelheid in ms
-
-            const shuffleText = document.getElementById('shuffle-text');
-
-            function doShuffle() {
-                iterations++;
-                const randomBrawler = brawlers[Math.floor(Math.random() * brawlers.length)];
-                shuffleText.innerText = randomBrawler;
-
-                if (iterations < maxIterations) {
-                    // Maak het langzamer naarmate we bij het einde komen
-                    if (iterations > 30) speed += 40;
-                    else if (iterations > 20) speed += 20;
-                    
-                    setTimeout(doShuffle, speed);
+            let count = 0;
+            let speed = 60;
+            
+            function shuffle() {
+                const randomName = brawlers[Math.floor(Math.random() * brawlers.length)];
+                document.getElementById('shuffle-text').innerText = randomName;
+                
+                count++;
+                if (count < 30) {
+                    if (count > 20) speed += 30;
+                    setTimeout(shuffle, speed);
                 } else {
-                    // Klaar! Toon resultaat
-                    setTimeout(showResult, 500);
+                    setTimeout(showFinal, 400);
                 }
             }
-
-            doShuffle();
+            shuffle();
         }
 
-        function showResult() {
+        function showFinal() {
             const diff = document.getElementById('difficulty').value;
             let trophies = 0;
-
             if (diff === "easy") trophies = Math.floor(Math.random() * 301) + 200;
             else if (diff === "medium") trophies = Math.floor(Math.random() * 101) + 500;
             else if (diff === "hard") trophies = Math.floor(Math.random() * 201) + 600;
             else if (diff === "impossible") trophies = 1000;
 
             const finalBrawler = document.getElementById('shuffle-text').innerText;
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
-            document.getElementById('brawler-name').innerText = finalBrawler;
-            document.getElementById('trophy-count').innerText = trophies;
+            document.getElementById('res-name').innerText = finalBrawler;
+            document.getElementById('res-trophies').innerText = trophies;
+            document.getElementById('card-bg').style.backgroundColor = randomColor;
 
             document.getElementById('shuffle-screen').classList.remove('active');
             document.getElementById('result-screen').classList.add('active');
@@ -192,3 +218,4 @@
     </script>
 </body>
 </html>
+
