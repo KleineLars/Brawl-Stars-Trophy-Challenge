@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brawl Stars Trophy Challenge</title>
+    <title>BS Trophy Challenge</title>
     <style>
         :root {
             --bs-blue: #0066ff;
@@ -36,7 +36,7 @@
         .active { display: flex; }
 
         h1 {
-            font-size: 2.2rem;
+            font-size: 2.8rem;
             color: var(--bs-yellow);
             text-shadow: 4px 4px #000;
             margin-bottom: 20px;
@@ -88,7 +88,6 @@
             text-shadow: 3px 3px #000;
         }
 
-        /* Vernieuwde Challenge Kaart zonder zwart vakje */
         .challenge-card {
             width: 450px;
             height: 250px;
@@ -197,7 +196,6 @@
             const diff = document.getElementById('difficulty').value;
             let trophies = 0;
             
-            // Trofeeën afronden op 10
             if (diff === "easy") trophies = Math.floor((Math.random() * 301 + 200) / 10) * 10;
             else if (diff === "medium") trophies = Math.floor((Math.random() * 101 + 500) / 10) * 10;
             else if (diff === "hard") trophies = Math.floor((Math.random() * 201 + 600) / 10) * 10;
@@ -221,3 +219,4 @@
     </script>
 </body>
 </html>
+
