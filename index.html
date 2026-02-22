@@ -3,92 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brawl Stars Challenge Generator</title>
+    <title>Brawl Stars Trophy Spin</title>
     <style>
+        /* Brawl Stars Theme Kleuren */
+        :root {
+            --bs-blue: #0066ff;
+            --bs-yellow: #ffcc00;
+            --bs-dark: #0c1428;
+            --bs-white: #ffffff;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0f172a;
-            color: white;
+            font-family: 'Arial Black', sans-serif;
+            background-color: var(--bs-dark);
+            color: var(--bs-white);
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            overflow: hidden;
         }
-        .container {
-            background-color: #1e293b;
-            border: 4px solid #fbbf24;
-            border-radius: 24px;
-            padding: 40px;
-            width: 90%;
-            max-width: 450px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        h1 { color: #fbbf24; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
-        select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            background: #334155;
-            color: white;
-            border: 2px solid #475569;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-        button {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            width: 100%;
-        }
-        button:active { transform: scale(0.95); }
-        #result {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #0f172a;
-            border-radius: 15px;
+
+        /* Schermen */
+        .screen {
             display: none;
-            border-left: 5px solid #fbbf24;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
         }
-        .label { font-size: 14px; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px; }
-        .value { font-size: 24px; font-weight: 900; margin-bottom: 15px; color: #fff; }
-        .highlight-brawler { color: #60a5fa; }
-        .highlight-trophy { color: #4ade80; }
-        .highlight-mode { color: #f87171; }
+
+        .active { display: flex; }
+
+        h1 {
+            font-size: 3rem;
+            color: var(--bs-yellow);
+            text-shadow: 4px 4px #000;
+            margin-bottom: 20px;
+        }
+
+        /* Knoppen */
+        .btn {
+            background: linear-gradient(to bottom, #ffcc00, #ff9900);
+            border: 4px solid #000;
+            color: #000;
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #996600;
+            transition: 0.1s;
+            text-transform: uppercase;
+        }
+
+        .btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #996600;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            width: 80%;
+            border: 3px solid var(--bs-blue);
+        }
+
+        /* Lucky Wheel Animatie */
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin-bottom: 30px;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border: 10px solid var(--bs-yellow);
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--bs-blue) 0% 12.5%, #0055dd 12.5% 25%,
+                var(--bs-blue) 25% 37.5%, #0055dd 37.5% 50%,
+                var(--bs-blue) 50% 62.5%, #0055dd 62.5% 75%,
+                var(--bs-blue) 75% 87.5%, #0055dd 87.5% 100%
+            );
+            transition: transform 3s cubic-bezier(0.15, 0, 0.15, 1);
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: red;
+            clip-path: polygon(50% 100%, 0 0, 100% 0);
+            z-index: 10;
+        }
+
+        /* Resultaat Kaart */
+        .result-card {
+            background: var(--bs-blue);
+            padding: 30px;
+            border: 5px solid var(--bs-white);
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .result-brawler { font-size: 35px; color: var(--bs-yellow); display: block; }
+        .result-trophies { font-size: 50px; display: block; margin: 10px 0; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Challenge Generator</h1>
-        
-        <label style="display:block; text-align:left; margin-bottom:5px;">Moeilijkheid:</label>
+    <div id="home-screen" class="screen active">
+        <h1>BRAWL SPIN</h1>
+        <p>Kies moeilijkheid:</p>
         <select id="difficulty">
-            <option value="easy">Easy (200 - 500)</option>
-            <option value="medium">Medium (500 - 600)</option>
-            <option value="hard">Hard (600 - 800)</option>
+            <option value="easy">Easy (200-500)</option>
+            <option value="medium">Medium (500-600)</option>
+            <option value="hard">Hard (600-800)</option>
             <option value="impossible">Impossible (1000)</option>
         </select>
+        <button class="btn" onclick="startSpin()">Draai Wiel!</button>
+    </div>
 
-        <button onclick="generateChallenge()">START CHALLENGE</button>
-
-        <div id="result">
-            <div class="label">Knokker:</div>
-            <div class="value highlight-brawler" id="brawler">-</div>
-            
-            <div class="label">Doel:</div>
-            <div class="value highlight-trophy" id="trophies">-</div>
-            
-            <div class="label">Game Mode:</div>
-            <div class="value highlight-mode" id="gamemode">-</div>
+    <div id="spin-screen" class="screen">
+        <h1>SPINNEN...</h1>
+        <div class="wheel-container">
+            <div class="wheel-pointer"></div>
+            <div id="wheel" class="wheel"></div>
         </div>
+    </div>
+
+    <div id="result-screen" class="screen">
+        <div class="result-card">
+            <span class="result-brawler" id="brawler-name">GEKOZEN!</span>
+            <span class="result-trophies" id="trophy-count">0</span>
+            <p>TROFEEËN CHALLENGE</p>
+        </div>
+        <br>
+        <button class="btn" onclick="goHome()">Terug naar Home</button>
     </div>
 
     <script>
@@ -100,33 +161,48 @@
             "Barley", "Brock", "Bull", "Colt", "El-Primo", "Nita", "Poco", "Rosa", "Shelly"
         ];
 
-        const modes = [
-            "Brawl Ball", "Solo Showdown", "Duo Showdown", 
-            "Gem Grab", "Knockout", "Heist", 
-            "Hot Zone", "Bounty", "Wipeout"
-        ];
+        let currentRotation = 0;
 
-        function generateChallenge() {
+        function startSpin() {
+            // Wissel naar spin scherm
+            document.getElementById('home-screen').classList.remove('active');
+            document.getElementById('spin-screen').classList.add('active');
+
+            // Draai animatie
+            const wheel = document.getElementById('wheel');
+            const extraSpins = 1800; // 5 rondjes
+            const randomStop = Math.floor(Math.random() * 360);
+            currentRotation += extraSpins + randomStop;
+            
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+            // Bereken resultaat na 3 seconden (tijd van animatie)
+            setTimeout(() => {
+                showResult();
+            }, 3200);
+        }
+
+        function showResult() {
             const diff = document.getElementById('difficulty').value;
             let trophies = 0;
 
-            if (diff === "easy") {
-                trophies = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
-            } else if (diff === "medium") {
-                trophies = Math.floor(Math.random() * (600 - 500 + 1)) + 500;
-            } else if (diff === "hard") {
-                trophies = Math.floor(Math.random() * (800 - 600 + 1)) + 600;
-            } else if (diff === "impossible") {
-                trophies = 1000;
-            }
+            if (diff === "easy") trophies = Math.floor(Math.random() * 301) + 200;
+            else if (diff === "medium") trophies = Math.floor(Math.random() * 101) + 500;
+            else if (diff === "hard") trophies = Math.floor(Math.random() * 201) + 600;
+            else if (diff === "impossible") trophies = 1000;
 
             const randomBrawler = brawlers[Math.floor(Math.random() * brawlers.length)];
-            const randomMode = modes[Math.floor(Math.random() * modes.length)];
 
-            document.getElementById('brawler').innerText = randomBrawler;
-            document.getElementById('trophies').innerText = trophies + " Trofeeën";
-            document.getElementById('gamemode').innerText = randomMode;
-            document.getElementById('result').style.display = 'block';
+            document.getElementById('brawler-name').innerText = randomBrawler;
+            document.getElementById('trophy-count').innerText = trophies;
+
+            document.getElementById('spin-screen').classList.remove('active');
+            document.getElementById('result-screen').classList.add('active');
+        }
+
+        function goHome() {
+            document.getElementById('result-screen').classList.remove('active');
+            document.getElementById('home-screen').classList.add('active');
         }
     </script>
 </body>
