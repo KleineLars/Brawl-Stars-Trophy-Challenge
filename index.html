@@ -64,48 +64,55 @@
             width: 80%;
             border: 3px solid var(--bs-blue);
             font-weight: bold;
+            background: white;
         }
 
-        /* Shuffle Text */
+        /* Shuffle Text Effect */
+        .shuffle-box {
+            background: rgba(0, 0, 0, 0.6);
+            width: 100vw;
+            padding: 40px 0;
+            border-top: 6px solid var(--bs-yellow);
+            border-bottom: 6px solid var(--bs-yellow);
+            margin: 20px 0;
+        }
+
         .shuffle-text {
-            font-size: 50px;
-            color: var(--bs-yellow);
+            font-size: 55px;
+            color: white;
             text-shadow: 3px 3px #000;
+            text-transform: uppercase;
         }
 
-        /* De "Video" Kaart Stijl */
+        /* Video Card Resultaat */
         .challenge-card {
-            width: 400px;
+            width: 420px;
             height: 200px;
-            border: 6px solid #000;
+            border: 8px solid #000;
             display: flex;
             position: relative;
             overflow: hidden;
-            background-color: #ff0000; /* Standaard kleur */
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.7);
+            animation: popIn 0.3s ease-out;
         }
 
         @keyframes popIn {
-            0% { transform: scale(0.6); opacity: 0; }
+            0% { transform: scale(0.7); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
 
         .brawler-img-placeholder {
-            width: 50%;
+            width: 45%;
             height: 100%;
-            background: #444;
+            background: #111;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-right: 6px solid #000;
-            font-size: 14px;
-            background-size: cover;
-            background-position: center;
+            border-right: 8px solid #000;
         }
 
         .card-info {
-            width: 50%;
+            width: 55%;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -114,51 +121,50 @@
         }
 
         .card-trophies {
-            font-size: 60px;
-            line-height: 1;
-            margin-bottom: 5px;
-        }
-
-        .trophy-icon {
-            width: 40px;
-            height: 40px;
-            margin-bottom: 5px;
+            font-size: 75px;
+            font-weight: 900;
+            line-height: 0.8;
+            color: white;
+            text-shadow: 4px 4px #000;
         }
 
         .card-name {
             background: #fff;
             color: #000;
-            padding: 2px 15px;
-            font-size: 24px;
+            padding: 5px 25px;
+            font-size: 30px;
             text-transform: uppercase;
             transform: skew(-10deg);
+            margin-top: 15px;
+            border: 3px solid #000;
         }
     </style>
 </head>
 <body>
 
     <div id="home-screen" class="screen active">
-        <h1>BRAWL CHALLENGE</h1>
+        <h1>BRAWLYTIX</h1>
         <select id="difficulty">
             <option value="easy">EASY (200-500)</option>
             <option value="medium">MEDIUM (500-600)</option>
             <option value="hard">HARD (600-800)</option>
             <option value="impossible">IMPOSSIBLE (1000)</option>
         </select>
-        <button class="btn" onclick="startShuffle()">START SPIN</button>
+        <button class="btn" onclick="startShuffle()">START CHALLENGE</button>
     </div>
 
     <div id="shuffle-screen" class="screen">
-        <div class="shuffle-text" id="shuffle-text">SHUFFLING...</div>
+        <div class="shuffle-box">
+            <div class="shuffle-text" id="shuffle-text">ZOEKEN...</div>
+        </div>
     </div>
 
     <div id="result-screen" class="screen">
         <div class="challenge-card" id="card-bg">
-            <div class="brawler-img-placeholder" id="brawler-img">
-                </div>
+            <div class="brawler-img-placeholder"></div>
             <div class="card-info">
                 <div class="card-trophies" id="res-trophies">0</div>
-                <div style="font-size: 20px; margin-bottom: 10px;">🏆</div>
+                <div style="font-size: 35px; margin-top: 5px;">🏆</div>
                 <div class="card-name" id="res-name">BRAWLER</div>
             </div>
         </div>
@@ -168,25 +174,28 @@
     <script>
         const brawlers = ["Kaze", "Amber", "Chester", "Cordelius", "Crow", "Draco", "Kenji", "Kit", "Leon", "Meg", "Pierce", "Sandy", "Spike", "Surge", "Alli", "Buster", "Buzz", "Byron", "Charlie", "Chuck", "Clancy", "Doug", "Eve", "Fang", "Finx", "Gene", "Gigi", "Glowbert", "Gray", "Jae-Yong", "Janet", "Juju", "Lily", "Lou", "Lumi", "Max", "Melodie", "Mico", "Mina", "Moe", "Mortis", "Mr. P", "Ollie", "Otis", "R-T", "Ruffs", "Sprout", "Squeak", "Tara", "Willow", "Ziggy", "Angelo", "Ash", "Bea", "Belle", "Berry", "Bibi", "Bo", "Bonnie", "Colette", "Edgar", "Emz", "Frank", "Gale", "Griff", "Grom", "Hank", "Larry & Lawrie", "Lola", "Maisie", "Mandy", "Meeple", "Nani", "Pam", "Pearl", "Piper", "Sam", "Shade", "Stu", "Trunk", "8-Bit", "Carl", "Darryl", "Dynamike", "Gus", "Jacky", "Jessie", "Penny", "Rico", "Tick", "Barley", "Brock", "Bull", "Colt", "El-Primo", "Nita", "Poco", "Rosa", "Shelly"];
         
-        const colors = ["#ff0000", "#aa00ff", "#00ff00", "#0066ff", "#ffcc00", "#ff6600"];
+        const colors = ["#ff2222", "#9c27b0", "#4caf50", "#2196f3", "#ffc107", "#ff5722", "#e91e63"];
 
         function startShuffle() {
             document.getElementById('home-screen').classList.remove('active');
             document.getElementById('shuffle-screen').classList.add('active');
 
             let count = 0;
-            let speed = 60;
+            let totalSteps = 40; 
+            let speed = 40; 
             
             function shuffle() {
                 const randomName = brawlers[Math.floor(Math.random() * brawlers.length)];
                 document.getElementById('shuffle-text').innerText = randomName;
                 
                 count++;
-                if (count < 30) {
-                    if (count > 20) speed += 30;
+                if (count < totalSteps) {
+                    // Maakt het geleidelijk trager
+                    if (count > 30) speed += 60;
+                    else if (count > 20) speed += 20;
                     setTimeout(shuffle, speed);
                 } else {
-                    setTimeout(showFinal, 400);
+                    setTimeout(showFinal, 600);
                 }
             }
             shuffle();
@@ -218,4 +227,3 @@
     </script>
 </body>
 </html>
-
