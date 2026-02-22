@@ -6,226 +6,187 @@
     <title>BS Trophy Challenge</title>
     <style>
         :root {
-            --bs-dark-blue: #0c1428;
-            --bs-light-blue: #4da6ff;
-            --bs-card-blue: #3a8dfd;
-            --bs-yellow: #ffcc00;
+            --bs-bg-blue: #2a4bb7;
+            --bs-dark-blue: #1a2b6d;
+            --bs-purple-card: #8c41f7;
+            --bs-yellow-btn: #fdbd10;
             --bs-white: #ffffff;
-            --bs-black: #000000;
         }
 
         body {
             font-family: 'Arial Black', sans-serif;
-            background-color: var(--bs-dark-blue);
+            background-color: var(--bs-bg-blue);
+            /* Achtergrond met subtiele patronen zoals in de screenshot */
+            background-image: radial-gradient(circle, #355ad0 0%, #1a2b6d 100%);
             color: var(--bs-white);
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
             text-align: center;
         }
 
-        .screen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 450px;
+        .container {
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 30px;
+            border: 4px solid rgba(0,0,0,0.2);
         }
 
-        .active-screen { display: flex; }
+        .screen { display: none; flex-direction: column; align-items: center; }
+        .active { display: flex; }
 
         h1 {
-            font-size: 2.2rem;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px var(--bs-black);
+            font-size: 24px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px #000;
         }
 
-        .subtitle {
-            background-color: rgba(255,255,255,0.1);
-            padding: 5px 15px;
-            border-radius: 5px;
-            font-size: 14px;
+        /* De paarse kaart stijl uit de screenshot */
+        .brawler-card {
+            background: var(--bs-purple-card);
+            background: repeating-conic-gradient(from 0deg, #9d5bff 0deg 20deg, #8c41f7 20deg 40deg);
+            border: 4px solid #000;
+            border-radius: 25px;
+            width: 280px;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 10px 0 rgba(0,0,0,0.3);
             margin-bottom: 20px;
         }
 
-        /* Buttons Style */
-        .btn-yellow {
-            background: linear-gradient(to bottom, #ffcc00, #ff9900);
-            border: 3px solid var(--bs-black);
-            color: var(--bs-black);
-            padding: 10px 30px;
-            font-size: 22px;
-            font-weight: bold;
-            border-radius: 15px;
-            cursor: pointer;
+        .brawler-name-label {
+            font-size: 18px;
             text-transform: uppercase;
-            box-shadow: 0 4px 0 #996600;
+            margin-bottom: 10px;
+            display: block;
         }
 
-        .btn-yellow:active {
+        .trophy-display {
+            font-size: 60px;
+            margin: 10px 0;
+            text-shadow: 4px 4px #000;
+        }
+
+        .trophy-icon {
+            font-size: 40px;
+            vertical-align: middle;
+        }
+
+        /* De specifieke gele Claim knop */
+        .btn-claim {
+            background: linear-gradient(to bottom, #fdbd10 0%, #eb8e05 100%);
+            border: 3px solid #000;
+            border-radius: 12px;
+            color: #000;
+            padding: 10px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 4px 0 #945604;
+            transition: 0.1s;
+        }
+
+        .btn-claim:active {
             transform: translateY(2px);
-            box-shadow: 0 2px 0 #996600;
+            box-shadow: 0 2px 0 #945604;
         }
 
         select {
-            background: var(--bs-dark-blue);
-            color: white;
-            border: 2px solid var(--bs-light-blue);
             padding: 10px;
             border-radius: 10px;
+            border: 3px solid #000;
             width: 80%;
             margin-bottom: 20px;
-            font-family: sans-serif;
+            font-weight: bold;
         }
 
-        /* Reward Card */
-        .reward-header {
-            font-size: 24px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
-
-        .reward-card {
-            background-color: var(--bs-card-blue);
-            border: 6px solid var(--bs-black);
-            border-radius: 40px;
-            width: 320px;
-            padding: 30px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
-        }
-
-        .card-title {
-            font-size: 28px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-
-        .trophy-amount {
-            font-size: 65px;
-            margin: 10px 0;
-            text-shadow: 4px 4px var(--bs-black);
-        }
-
-        .info-pill {
-            background-color: rgba(0,0,0,0.3);
-            border-radius: 30px;
-            padding: 8px 30px;
-            margin: 5px 0;
-            font-size: 20px;
-            text-transform: uppercase;
-            width: 80%;
-        }
-
-        .icon-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 24px;
-            margin: 15px 0;
-        }
-
-        /* Shuffle Box */
-        .shuffle-box {
-            padding: 40px 0;
+        .shuffle-text {
             font-size: 40px;
-            color: var(--bs-yellow);
+            height: 100px;
+            display: flex;
+            align-items: center;
+            color: #fff;
         }
     </style>
 </head>
 <body>
 
-    <div id="home-screen" class="screen active-screen">
-        <h1>BS Trophy Challenge</h1>
-        <div class="subtitle">EASY (Medium: 200-500)</div>
-        <p style="font-size: 14px; margin-bottom: 10px;">select: val fzes comded</p>
-        
-        <select id="difficulty">
-            <option value="easy">EASY (200-500)</option>
-            <option value="medium">MEDIUM (500-600)</option>
-            <option value="hard">HARD (600-800)</option>
-            <option value="impossible">IMPOSSIBLE (1000)</option>
-        </select>
-        
-        <button class="btn-yellow" onclick="startShuffle()">ACTIVE</button>
-    </div>
+    <div class="container">
+        <div id="home-screen" class="screen active">
+            <h1>CHOOSE YOUR REWARD</h1>
+            <select id="difficulty">
+                <option value="easy">EASY (200-500)</option>
+                <option value="medium">MEDIUM (500-600)</option>
+                <option value="hard">HARD (600-800)</option>
+                <option value="impossible">1000 TROPHIES</option>
+            </select>
+            <button class="btn-claim" onclick="startShuffle()">START</button>
+        </div>
 
-    <div id="shuffle-screen" class="screen">
-        <div class="reward-header">CHOOSE YOUR REWARD<br>SHUFFLING TEXT</div>
-        <div class="shuffle-box" id="shuffle-text">---</div>
-    </div>
+        <div id="shuffle-screen" class="screen">
+            <h1>SHUFFLING...</h1>
+            <div class="shuffle-text" id="shuffle-text">---</div>
+        </div>
 
-    <div id="result-screen" class="screen">
-        <div class="reward-header">CHOOSE YOUR REWARD<br>RESULT FOUND</div>
-        
-        <div class="reward-card">
-            <div class="card-title">TROPHIES</div>
-            <div class="trophy-amount" id="res-trophies">+0</div>
-            
-            <div class="info-pill" id="res-name">BRAWLER</div>
-            
-            <div class="icon-row">
-                🏆 + 1 🏆
+        <div id="result-screen" class="screen">
+            <div class="brawler-card">
+                <span class="brawler-name-label" id="res-name">BRAWLER</span>
+                <div class="trophy-display"><span id="res-trophies">0</span> <span class="trophy-icon">🏆</span></div>
+                <button class="btn-claim" onclick="goHome()">CLAIM</button>
             </div>
-            
-            <button class="btn-yellow" style="width: 90%;" onclick="goHome()">CLAIM</button>
         </div>
     </div>
 
     <script>
-        const brawlers = ["Kaze", "Amber", "Chester", "Cordelius", "Crow", "Draco", "Kenji", "Kit", "Leon", "Meg", "Pierce", "Sandy", "Spike", "Surge", "Buster", "Buzz", "Byron", "Charlie", "Clancy", "Doug", "Eve", "Fang", "Janet", "Lou", "Max", "Melodie", "Mico", "Mortis", "Otis", "Tara", "Willow", "Angelo", "Ash", "Bea", "Belle", "Bibi", "Bo", "Colette", "Edgar", "Emz", "Frank", "Gale", "Griff", "Grom", "Piper", "Sam", "Stu", "8-Bit", "Carl", "Darryl", "Dynamike", "Gus", "Jacky", "Jessie", "Penny", "Rico", "Tick", "Barley", "Brock", "Bull", "Colt", "El-Primo", "Nita", "Poco", "Rosa", "Shelly"];
+        const brawlers = ["Kaze", "Ziggy", "Pam", "Lou", "Amber", "Chester", "Cordelius", "Crow", "Draco", "Kenji", "Kit", "Leon", "Meg", "Sandy", "Spike", "Surge", "Colt", "Shelly", "Mortis", "Edgar", "Fang"];
 
         function startShuffle() {
-            document.getElementById('home-screen').classList.remove('active-screen');
-            document.getElementById('shuffle-screen').classList.add('active-screen');
+            document.getElementById('home-screen').classList.remove('active');
+            document.getElementById('shuffle-screen').classList.add('active');
 
             let count = 0;
-            let totalSteps = 30;
             let speed = 50;
+            const textElement = document.getElementById('shuffle-text');
 
-            function shuffle() {
-                const randomName = brawlers[Math.floor(Math.random() * brawlers.length)];
-                document.getElementById('shuffle-text').innerText = randomName;
-                
+            function doShuffle() {
+                textElement.innerText = brawlers[Math.floor(Math.random() * brawlers.length)];
                 count++;
-                if (count < totalSteps) {
-                    if (count > 20) speed += 40;
-                    setTimeout(shuffle, speed);
+                if (count < 30) {
+                    if (count > 20) speed += 30;
+                    setTimeout(doShuffle, speed);
                 } else {
-                    setTimeout(showFinal, 600);
+                    setTimeout(showResult, 500);
                 }
             }
-            shuffle();
+            doShuffle();
         }
 
-        function showFinal() {
+        function showResult() {
             const diff = document.getElementById('difficulty').value;
             let trophies = 0;
-            
             if (diff === "easy") trophies = Math.floor((Math.random() * 301 + 200) / 10) * 10;
             else if (diff === "medium") trophies = Math.floor((Math.random() * 101 + 500) / 10) * 10;
             else if (diff === "hard") trophies = Math.floor((Math.random() * 201 + 600) / 10) * 10;
             else if (diff === "impossible") trophies = 1000;
 
-            const finalBrawler = document.getElementById('shuffle-text').innerText;
+            document.getElementById('res-name').innerText = document.getElementById('shuffle-text').innerText;
+            document.getElementById('res-trophies').innerText = trophies;
 
-            document.getElementById('res-name').innerText = finalBrawler;
-            document.getElementById('res-trophies').innerText = "+" + trophies;
-
-            document.getElementById('shuffle-screen').classList.remove('active-screen');
-            document.getElementById('result-screen').classList.add('active-screen');
+            document.getElementById('shuffle-screen').classList.remove('active');
+            document.getElementById('result-screen').classList.add('active');
         }
 
         function goHome() {
-            document.getElementById('result-screen').classList.remove('active-screen');
-            document.getElementById('home-screen').classList.add('active-screen');
+            document.getElementById('result-screen').classList.remove('active');
+            document.getElementById('home-screen').classList.add('active');
         }
     </script>
 </body>
 </html>
+
