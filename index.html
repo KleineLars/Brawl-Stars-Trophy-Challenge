@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brawl Stars Challenge Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #1e293b;
+            border: 4px solid #fbbf24;
+            border-radius: 24px;
+            padding: 40px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        h1 { color: #fbbf24; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            background: #334155;
+            color: white;
+            border: 2px solid #475569;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        button {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+        button:active { transform: scale(0.95); }
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #0f172a;
+            border-radius: 15px;
+            display: none;
+            border-left: 5px solid #fbbf24;
+        }
+        .label { font-size: 14px; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px; }
+        .value { font-size: 24px; font-weight: 900; margin-bottom: 15px; color: #fff; }
+        .highlight-brawler { color: #60a5fa; }
+        .highlight-trophy { color: #4ade80; }
+        .highlight-mode { color: #f87171; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Challenge Generator</h1>
+        
+        <label style="display:block; text-align:left; margin-bottom:5px;">Moeilijkheid:</label>
+        <select id="difficulty">
+            <option value="easy">Easy (200 - 500)</option>
+            <option value="medium">Medium (500 - 600)</option>
+            <option value="hard">Hard (600 - 800)</option>
+            <option value="impossible">Impossible (1000)</option>
+        </select>
+
+        <button onclick="generateChallenge()">START CHALLENGE</button>
+
+        <div id="result">
+            <div class="label">Knokker:</div>
+            <div class="value highlight-brawler" id="brawler">-</div>
+            
+            <div class="label">Doel:</div>
+            <div class="value highlight-trophy" id="trophies">-</div>
+            
+            <div class="label">Game Mode:</div>
+            <div class="value highlight-mode" id="gamemode">-</div>
+        </div>
+    </div>
+
+    <script>
+        const brawlers = [
+            "Kaze", "Amber", "Chester", "Cordelius", "Crow", "Draco", "Kenji", "Kit", "Leon", "Meg", "Pierce", "Sandy", "Spike", "Surge",
+            "Alli", "Buster", "Buzz", "Byron", "Charlie", "Chuck", "Clancy", "Doug", "Eve", "Fang", "Finx", "Gene", "Gigi", "Glowbert", "Gray", "Jae-Yong", "Janet", "Juju", "Lily", "Lou", "Lumi", "Max", "Melodie", "Mico", "Mina", "Moe", "Mortis", "Mr. P", "Ollie", "Otis", "R-T", "Ruffs", "Sprout", "Squeak", "Tara", "Willow", "Ziggy",
+            "Angelo", "Ash", "Bea", "Belle", "Berry", "Bibi", "Bo", "Bonnie", "Colette", "Edgar", "Emz", "Frank", "Gale", "Griff", "Grom", "Hank", "Larry & Lawrie", "Lola", "Maisie", "Mandy", "Meeple", "Nani", "Pam", "Pearl", "Piper", "Sam", "Shade", "Stu", "Trunk",
+            "8-Bit", "Carl", "Darryl", "Dynamike", "Gus", "Jacky", "Jessie", "Penny", "Rico", "Tick",
+            "Barley", "Brock", "Bull", "Colt", "El-Primo", "Nita", "Poco", "Rosa", "Shelly"
+        ];
+
+        const modes = [
+            "Brawl Ball", "Solo Showdown", "Duo Showdown", 
+            "Gem Grab", "Knockout", "Heist", 
+            "Hot Zone", "Bounty", "Wipeout"
+        ];
+
+        function generateChallenge() {
+            const diff = document.getElementById('difficulty').value;
+            let trophies = 0;
+
+            if (diff === "easy") {
+                trophies = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
+            } else if (diff === "medium") {
+                trophies = Math.floor(Math.random() * (600 - 500 + 1)) + 500;
+            } else if (diff === "hard") {
+                trophies = Math.floor(Math.random() * (800 - 600 + 1)) + 600;
+            } else if (diff === "impossible") {
+                trophies = 1000;
+            }
+
+            const randomBrawler = brawlers[Math.floor(Math.random() * brawlers.length)];
+            const randomMode = modes[Math.floor(Math.random() * modes.length)];
+
+            document.getElementById('brawler').innerText = randomBrawler;
+            document.getElementById('trophies').innerText = trophies + " Trofeeën";
+            document.getElementById('gamemode').innerText = randomMode;
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
